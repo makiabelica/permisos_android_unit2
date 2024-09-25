@@ -1,0 +1,1 @@
+[Clic aquí para ver video](https://ufgedu-my.sharepoint.com/:v:/g/personal/ia_angieespinoza_ufg_edu_sv/EfYAyXDJkZ5CsxA3qOtfjnoBwpYJY8ZCF6ZwiLo257D4LQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=3FGQfJ)
