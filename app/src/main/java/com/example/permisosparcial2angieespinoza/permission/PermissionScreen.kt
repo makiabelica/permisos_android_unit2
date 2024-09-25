@@ -1,6 +1,7 @@
 package com.example.permisosparcial2angieespinoza.permission
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
 import android.net.Uri
@@ -17,13 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
-import kotlinx.coroutines.launch
 
 @Composable
 fun PermissionScreen() {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
 
     // Estados para manejar imágenes y ubicación
     var capturedImageBitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -77,13 +77,18 @@ fun PermissionScreen() {
         // Botón para solicitar permiso de cámara y tomar foto
         Button(
             onClick = {
-                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                // Verifica si el permiso ya está concedido
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    cameraLauncher.launch(null)
+                } else {
+                    requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Text(text = "Solicitar Permiso de Cámara")
+            Text(text = "Tomar Foto con Cámara")
         }
 
         // Mostrar imagen capturada
@@ -103,14 +108,18 @@ fun PermissionScreen() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     galleryLauncher.launch("image/*")
                 } else {
-                    requestStoragePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        galleryLauncher.launch("image/*")
+                    } else {
+                        requestStoragePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    }
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Text(text = "Solicitar Permiso de Almacenamiento")
+            Text(text = "Seleccionar Imagen de Galería")
         }
 
         // Mostrar imagen seleccionada de la galería
@@ -127,13 +136,21 @@ fun PermissionScreen() {
         // Botón para solicitar permiso de ubicación y obtener ubicación actual
         Button(
             onClick = {
-                requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                // Verifica si el permiso ya está concedido
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    val locationProvider = LocationProvider(context) { location ->
+                        locationText = "Lat: ${location.latitude}, Lng: ${location.longitude}"
+                    }
+                    locationProvider.requestLocationUpdates()
+                } else {
+                    requestLocationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            Text(text = "Solicitar Permiso de Ubicación")
+            Text(text = "Obtener Ubicación Actual")
         }
 
         // Mostrar la ubicación actual
